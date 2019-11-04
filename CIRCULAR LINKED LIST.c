@@ -31,6 +31,7 @@ struct node *(struct node *start);*/
 
 int main()
 {
+	printf("Hello CLL");
 	int ch;
 	do
 	{
