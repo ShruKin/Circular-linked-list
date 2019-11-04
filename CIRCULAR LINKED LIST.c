@@ -21,6 +21,7 @@ struct node *sort(struct node *start);
 struct node *search(struct node *start);
 struct node *reverse(struct node *start);
 struct node *deleteduplicates(struct node *start);
+struct node *insertsorted(struct node *start, int val);
 /*struct node *count(struct node *start);
 struct node *findmid(struct node *start);
 struct node *insertmid(struct node *start);
@@ -35,49 +36,39 @@ int main()
 	do
 	{
 		printf("\n MAIN MENU");
-		printf("\n 1.Create list \n 2.display \n 3.insert at beginning \n 4.insert at end \n 5.insert at position \n 6.delete at beginning \n 7.delete at end \n 8.delete at pos \n 9.sort list \n 10.search element \n 11.reverse list \n 12.delete duplicate elements from list \n 13.EXIT\n");
-		printf("enter your choice : ");
+		printf("\n 1.Create list \n 2.display \n 3.insert at beginning \n 4.insert at end \n 5.insert at position \n 6.delete at beginning \n 7.delete at end \n 8.delete at pos \n 9.sort list \n 10.search element \n 11.reverse list \n 12.delete duplicate elements from list \n 13.Insert in a sorted list\n 14.EXIT\n");
+		printf("Enter your choice : ");
 		scanf("%d",&ch);
 		switch(ch)
 		{
 			case 1:
 				start=create(start);
-				printf("\n linked list created ");
+				printf("\nLinked list created ");
 				break;
-			case 2:
-				start=display(start);
-				break;
-			case 3:start=insertatbeg(start);
-					break;
-			case 4:start=insertatend(start);
-					break;
-			case 5:start=insertatpos(start);
-					break;
-			case 6:	start=deleteatbeg(start);
-					break;
-			case 7:start=deleteatend(start);
-					break;
-			case 8:start=deleteatpos(start);
-					break;
-			case 9:start=sort(start);
-					break;
-			case 10:start=search(start);
-					break;
-			case 11:start=reverse(start);
-					break;
-			case 12:start=deleteduplicates(start);
-					break;
+			case 2:		start=display(start);			break;
+			case 3:		start=insertatbeg(start);		break;
+			case 4:		start=insertatend(start);		break;
+			case 5:		start=insertatpos(start);		break;
+			case 6:		start=deleteatbeg(start);		break;
+			case 7:		start=deleteatend(start);		break;
+			case 8:		start=deleteatpos(start);		break;
+			case 9:		start=sort(start);				break;
+			case 10:	start=search(start);			break;
+			case 11:	start=reverse(start);			break;
+			case 12:	start=deleteduplicates(start);	break;
+			case 13:	start=insertsorted(start, 3);	break;
 			}
-		}while(ch!=13);
+		}while(ch!=14);
 			getch();
 			return 0;
-	}
+}
+
 struct node *create(struct node *start)
 {
-	struct node *newnode,*ptr;
+	struct node *newnode, *ptr;
 	int num;
-	printf("enter -1 to end. \n");
-	printf("enter data : ");
+	printf("Enter -1 to end. \n");
+	printf("Enter data : ");
 	scanf("%d",&num);
 	while(num!=-1)
 	{
@@ -345,6 +336,35 @@ struct node *sort(struct node *start)
 			q=q->next;
 		}
 		p=p->next;
+	}
+	return start;
+}
+
+struct node *insertsorted(struct node *start, int val)
+{
+	struct node *ptr, *newnode;
+	newnode = (struct node*)malloc(sizeof(struct node));
+	newnode->data = val;
+	newnode->next = NULL;
+	ptr = start;
+
+	if((start == NULL) || (start->data >= newnode->data))
+	{
+		while(ptr->next != start)
+			ptr = ptr->next;
+
+		ptr->next = newnode;
+		newnode->next = start;
+		start = newnode;
+	}
+
+	else
+	{
+		while(ptr->next != NULL && ptr->next->data < newnode->data)
+			ptr = ptr->next;
+
+		newnode->next = ptr->next;
+		ptr->next = newnode;
 	}
 	return start;
 }
