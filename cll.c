@@ -10,15 +10,15 @@ struct node
 };
 
 struct node *create(struct node *start);
-struct node *display(struct node *start);
-struct node *insertatbeg(struct node *start);
-struct node *insertatend(struct node *start);
-struct node *insertatpos(struct node *start);
+void display(struct node *start);
+struct node *insertatbeg(struct node *start, int num);
+struct node *insertatend(struct node *start, int num);
+struct node *insertatpos(struct node *start, int num, int pos);
 struct node *deleteatbeg(struct node *start);
 struct node *deleteatend(struct node *start);
-struct node *deleteatpos(struct node *start);
+struct node *deleteatpos(struct node *start, int pos);
 struct node *sort(struct node *start);
-struct node *search(struct node *start);
+int search(struct node *start, int item);
 struct node *reverse(struct node *start);
 struct node *deleteduplicates(struct node *start);
 struct node *insertsorted(struct node *start, int val);
@@ -54,192 +54,227 @@ struct node *create(struct node *start)
 			ptr->next=newnode;
 			newnode->next=start;
 		}
-		printf("enter data : ");
+		printf("Enter data : ");
 		scanf("%d",&num);		
 	}
 	return start;	
 }
-struct node *display(struct node *start)
+
+void display(struct node *start)
 {
 	struct node *ptr;
 	ptr=start;
-	printf("linked list is");
+	printf("Circular linked list is: ");
+	if(start == NULL){
+		printf("Empty!");
+		return;
+	}
+
 	while(ptr->next!=start)
 	{
 		printf("\t %d",ptr->data);
 		ptr=ptr->next;
 	}
 	printf("\t %d",ptr->data);
-	return start;
 }
-struct node *insertatbeg(struct node *start)
+
+struct node *insertatbeg(struct node *start, int num)
 {
 	struct node *ptr,*newnode;
-	int num;
 	newnode=(struct node*)malloc(sizeof(struct node));
-	printf("enter the number to be inserted : ");
-	scanf("%d",&num);
-    newnode->data=num;
+    newnode->data = num;
+	newnode->next = NULL;
+
+	if(start == NULL)
+	{
+		start = newnode;
+		newnode->next = start;
+	}
+
 	ptr=start;
 	while(ptr->next!=start)
-	ptr=ptr->next;
+		ptr=ptr->next;
+
 	ptr->next=newnode;
 	newnode->next=start;
 	start=newnode;
 	return start;
 }
-struct node *insertatend(struct node *start)
+
+struct node *insertatend(struct node *start, int num)
 {
 	struct node *ptr,*newnode;
-	int num;
 	newnode=(struct node*)malloc(sizeof(struct node));
-	printf("enter the number to be inserted :");
-	scanf("%d",&num);
-	newnode->data=num;
+	newnode->data = num;
+	newnode->next = NULL;
+
+	if(start == NULL)
+	{
+		start = newnode;
+		newnode->next = start;
+	}
+
     ptr=start;
     while(ptr->next!=start)
-    ptr=ptr->next;
+		ptr=ptr->next;
+
     ptr->next=newnode;
     newnode->next=start;
     return start;
 }
+
 struct node *deleteatbeg(struct node *start)
 {
 	struct node *ptr,*temp;
 	if(start==NULL)
 	{
-	printf("\n list is empty");
-	return 0;
+		printf("\nList is empty");
+		return NULL;
 	}
+
 	else if(start->next==start)
 	{
 		start=NULL;
 		return start;
 	}
+
 	else
 	{    
-	     ptr=temp=start;
+	    ptr=temp=start;
 		while(ptr->next!=start)
-		ptr=ptr->next;
+			ptr=ptr->next;
 		ptr->next=temp->next;
 		start=ptr->next;
 		free(temp);
 		return start;
 	}
 }
+
 struct node *deleteatend(struct node *start)
 {
-struct node *ptr,*preptr;
-if(start==NULL)
+	struct node *ptr,*preptr;
+	if(start==NULL)
 	{
-	printf("\n list is empty");
-	return 0;
+		printf("\nList is empty");
+		return NULL;
 	}
+
 	else if(start->next==start)
 	{
-		start=NULL;
+			start=NULL;
+			return start;
+	}
+
+	else
+	{
+		ptr=start;
+		while(ptr->next!=start)
+		{
+			preptr=ptr;
+			ptr=ptr->next;
+		}
+		preptr->next=ptr->next;
+		free(ptr);
 		return start;
 	}
-else
-{
-ptr=start;
-while(ptr->next!=start)
-{
-preptr=ptr;
-ptr=ptr->next;
 }
-preptr->next=ptr->next;
-free(ptr);
-return start;
-}
-}
+
 struct node *deleteduplicates(struct node *start)
 {
 	struct node *ptr,*ptr2,*ptr3;
 	ptr=start;
 	if(start==NULL)
 	{
-	printf("\n list is empty");
-	return 0;
+		printf("\nList is empty");
+		return 0;
 	}
 	else
 	{
-	
-	while(ptr->next!=start)
-	{
-		ptr2=ptr;
-		ptr3=ptr->next;
-		while(ptr3!=start)
+		while(ptr->next!=start)
 		{
-			if(ptr3->data==ptr->data)
+			ptr2=ptr;
+			ptr3=ptr->next;
+			while(ptr3!=start)
 			{
-				ptr2->next=ptr3->next;
-				free(ptr3);
-				ptr3=ptr2;
+				if(ptr3->data==ptr->data)
+				{
+					ptr2->next=ptr3->next;
+					free(ptr3);
+					ptr3=ptr2;
+				}
+				ptr3=ptr3->next;
 			}
-			ptr3=ptr3->next;
+			ptr=ptr->next;
 		}
-		ptr=ptr->next;
+		printf("All duplicate nodes have been deleted");
+		return start;
 	}
-	printf("all duplicate nodes have been deleted");
-	return start;
 }
-}
-struct node *insertatpos(struct node *start)
+
+struct node *insertatpos(struct node *start, int data, int pos)
 {
 	struct node *ptr,*newnode;
-	int pos,i=1,data;
+	int i=1;
 	newnode=(struct node*)malloc(sizeof(struct node));
-	printf("\n enter  the data ");
-    scanf("%d",&data);
-    printf("enter the position");
-    scanf("%d",&pos);
+    newnode->data = data;
+	newnode->next = NULL;
+
     ptr=start;
-    newnode->data=data;
 	if(start==NULL)
 	{
        start=newnode;
        newnode->next=start;
 	}
-	while(i<pos-1 && ptr->next!=start)
+
+	while(i<pos-1)
 	{
+		if(ptr->next!=start)
+		{
+			printf("Position number exceeded!");
+			return start;
+		}
 		i++;
 		ptr=ptr->next;
 	}
 	newnode->next= ptr->next;
 	ptr->next=newnode;
 	return start;
-	
 }
-struct node *deleteatpos(struct node *start)
+
+struct node *deleteatpos(struct node *start, int pos)
 {
 	struct node *ptr,*ptr2;
-	int pos,i=1;
+	int i=1;
 	if(start==NULL)
 	{
-		printf("\n linked list empty");
+		printf("\nLinked list empty");
 		return 0;
 		
 	}
+
 	else if(start->next==start)
 	{
 		start=NULL;
 		return start;
 	}
-	printf("\n enter the position you want to delete");
-	scanf("%d",&pos);
+
 	ptr=start;
-	while(i<pos-1&&ptr->next!=start)
+	while(i<pos-1)
 	{
-	ptr=ptr->next;
-	i++;
+		if(ptr->next!=start)
+		{
+			printf("Position number exceeded!");
+			return start;
+		}
+		ptr=ptr->next;
+		i++;
     }
     ptr2=ptr->next;
     ptr->next=ptr2->next;
     free(ptr2);
     return start;
-    
 }
+
 struct node *reverse(struct node *start)
 {
 	struct node *prev,*curr,*tail,*temp;
@@ -257,33 +292,30 @@ struct node *reverse(struct node *start)
 	start=prev;
 	return start;
 }
-struct node *search(struct node *start)
+
+int search(struct node *start, int item)
 {
 	struct node *ptr;
-	int item;
 	ptr=start;
 	int pos=1;
+
 	if(start==NULL)
 	{
-		printf("n linked list does not exist");
+		printf("\nLinked list does not exist");
 		return 0;
 	}
-	printf("enter value to search");
-	fflush(stdin);
-	scanf("%d",&item);
-	while(ptr!=NULL)
+
+	do
 	{
 		if(ptr->data==item)
-		{
-			printf("\n value is found at position %d",pos);
-			return 0;
-		}
+			return pos;
 		pos++;
 		ptr=ptr->next;
-		
-	}
-	return start;
+	}while(ptr!=start);
+
+	return -1;
 }
+
 struct node *sort(struct node *start)
 {
 	struct node *p,*q;
