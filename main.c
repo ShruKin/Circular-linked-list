@@ -20,6 +20,12 @@ int main()
         printf("\n11. Reverse list ");
         printf("\n12. Delete duplicate elements from list ");
         printf("\n13. Insert in a sorted list");
+        printf("\n14. Count no. of nodes");
+        printf("\n15. Find middle node");
+        printf("\n16. Insert at middle");
+        printf("\n17. Delete from middle");
+        printf("\n18. Exchange first and last node");
+        printf("\n19. Split the list");
         printf("\n0. EXIT\n");
 
 		printf("Enter your choice : ");
@@ -82,6 +88,26 @@ int main()
                 printf("Enter data: ");
                 scanf("%d", &data);
                 cll = insertsorted(cll, data);	    break;
+
+            case 14:
+                printf("%d no. of nodes present!", count(cll)); break;
+
+            case 15:
+                struct node *mid = findmid(cll);
+                printf("The middle element is: %d", mid->data);
+                break;
+
+            case 16:
+                printf("Enter data: ");
+                scanf("%d", &data);
+                cll = insertmid(cll, data);
+                break;
+
+            case 17:    cll = deletemid(cll);   break;
+
+            case 18:    cll = exchangefirstlast(cll);   break;
+
+            case 19:    cll = split(cll);   break;
 		}
 
         printf("\n\n");
