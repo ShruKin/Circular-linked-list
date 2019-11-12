@@ -220,15 +220,29 @@ struct node *insertatpos(struct node *start, int data, int pos)
 	newnode->next = NULL;
 
     ptr=start;
+
+	if(pos <= 0){
+		printf("Position number exceeded!");
+		return start;
+	}
+
 	if(start==NULL)
 	{
        start=newnode;
        newnode->next=start;
 	}
 
+	if(pos == 1){
+		while(ptr->next != start)
+			ptr = ptr->next;
+		newnode->next= ptr->next;
+		ptr->next=newnode;
+		return newnode;
+	}
+
 	while(i<pos-1)
 	{
-		if(ptr->next!=start)
+		if(ptr->next==start)
 		{
 			printf("Position number exceeded!");
 			return start;
@@ -238,6 +252,7 @@ struct node *insertatpos(struct node *start, int data, int pos)
 	}
 	newnode->next= ptr->next;
 	ptr->next=newnode;
+
 	return start;
 }
 
@@ -252,6 +267,11 @@ struct node *deleteatpos(struct node *start, int pos)
 		
 	}
 
+	if(pos <= 0){
+		printf("Position number exceeded!");
+		return start;
+	}
+
 	else if(start->next==start)
 	{
 		start=NULL;
@@ -259,6 +279,15 @@ struct node *deleteatpos(struct node *start, int pos)
 	}
 
 	ptr=start;
+	if(pos == 1){
+		while(ptr->next != start)
+			ptr = ptr->next;
+		ptr2 = ptr->next;
+		ptr->next=ptr2->next;
+		free(ptr2);
+		return ptr->next;
+	}
+
 	while(i<pos-1)
 	{
 		if(ptr->next!=start)
