@@ -22,13 +22,13 @@ int search(struct node *start, int item);
 struct node *reverse(struct node *start);
 struct node *deleteduplicates(struct node *start);
 struct node *insertsorted(struct node *start, int val);
-/*struct node *count(struct node *start);
-struct node *findmid(struct node *start);
-struct node *insertmid(struct node *start);
+int count(struct node *start);
+int findmid(struct node *start);
+struct node *insertmid(struct node *start,int data);
 struct node *deletemid(struct node *start);
 struct node *exchangefirstlast(struct node *start);
 struct node *split(struct node *start);
-struct node *(struct node *start);*/
+
 
 struct node *create(struct node *start)
 {
@@ -395,4 +395,118 @@ struct node *insertsorted(struct node *start, int val)
 		ptr->next = newnode;
 	}
 	return start;
+}
+
+int count(struct node *start)
+{
+	if(start==NULL)
+	printf("list is empty");
+	struct node *ptr;
+	int cnt=0;
+	ptr=start;
+	while(ptr->next!=start)
+	{
+		cnt++;
+		ptr=ptr->next;
+	}
+	printf(" \nThe no. of nodes %d",cnt+1);
+	return (cnt+1);
+}
+int findmid(struct node *start)
+{
+	struct node *ptr,*ptr2;
+	ptr=ptr2=start;
+	int cnt=0,m=1,mid;
+	cnt=count(start);
+	if(cnt%2!=0)
+		mid=(cnt+1)/2;	
+	else
+		mid=cnt/2;
+	while(ptr->next!=start)
+	{
+		while(m<mid)
+		{
+			ptr2=ptr2->next;
+			m++;
+			
+		}
+		ptr=ptr->next;
+	}
+	printf("/n the middle element %d ",ptr2->data);	
+	return mid;
+}
+struct node *insertmid(struct node *start,int data)
+{
+	int b,m=1;
+	struct node *ptr2,*newn;
+	ptr2=start;
+	b=findmid(start);
+	while(ptr2->next!=start&&m<b)
+		{
+			ptr2=ptr2->next;
+			m++;
+		}
+	newn=(struct node*)malloc(sizeof(struct node));
+	newn->data=data;
+	newn->next=ptr2->next;
+	ptr2->next=newn;
+	return start;
+}
+
+struct node *deletemid(struct node *start)
+{
+	int b,m=1;
+	struct node *ptr,*temp;
+	if(start==NULL)
+	printf("list is empty");
+	ptr=start;
+	b=findmid(start);
+	while(ptr->next!=start&&m<(b-1))
+	{
+		ptr=ptr->next;
+		m++;
+	}
+	temp=ptr->next;
+	ptr->next=temp->next;
+	free(temp);
+	return start;
+}
+
+struct node *split(struct node *start)
+{
+	if(start==NULL)
+	printf("linked list empty");
+	else
+	{
+		struct node *fast,*slow;
+		slow=fast=start;
+		while(fast->next!=start&&fast->next->next!=start)
+		{
+			fast=fast->next->next;
+			slow=slow->next;
+		}
+		struct node *head1=start,*head2=slow->next;
+		slow->next=head1;
+		if(fast->next->next==start)
+		{
+			fast=fast->next;
+		}
+		fast->next=head2;
+		display(head1);
+		display(head2);
+	}
+}
+
+struct node *exchangefirstlast(struct node *start)
+{
+	struct node *ptr=start,*qtr=start;
+	if(start==NULL)
+		printf("list is empty");
+	int t=0;
+	while(ptr->next!=start)
+		ptr=ptr->next;
+	t=ptr->data;
+	ptr->data=qtr->data;
+	qtr->data=t;
+    return start;
 }
